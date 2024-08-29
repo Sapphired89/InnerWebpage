@@ -52,25 +52,24 @@
             const iframe = document.getElementById('loadedWeb');
             iframe.src = webUrl;
 
-            // Set a timeout to check if the iframe has loaded correctly
-            iframe.onload = function() {
-                if (iframe.contentWindow.location.href === 'about:blank') {
-                    handleError();
-                }
-            };
+            iframe.onerror = handleError; // Handle errors with onerror event
 
-            // Add a timeout as a fallback for other errors
+            // Add a fallback timeout for detecting load issues
             setTimeout(() => {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                if (!iframeDoc || iframeDoc.documentURI === 'about:blank') {
-                    handleError();
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (!iframeDoc || iframeDoc.documentURI === 'about:blank') {
+                        handleError();
+                    }
+                } catch (e) {
+                    handleError(); // Handle potential cross-origin errors
                 }
             }, 5000);
         } else {
             // Handle missing URL case
             handleError();
         }
-        console.log(webUrl);  // Add this line to check what URL is being passed
+        console.log(webUrl);  // Check what URL is being passed
     </script>
 </body>
 </html>
