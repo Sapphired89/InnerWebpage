@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Inserter</title>
+    <style>
+        html, body {
+            height: 100%; /* Ensure body takes full height */
+            margin: 0; /* Remove default margins */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .web {
+            outline: thick solid #000000; /* Outline around the iframe */
+            width: 85%; /* Default width */
+            height: 80%; /* Default height */
+            border-radius: 3rem;
+            box-shadow: 0px 0px 10px #404040; /* Drop shadow */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <iframe id="loadedWeb" class="web"></iframe>
+    </div>
+    <script>
+        // Function to get query parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Get the web URL from the query parameters
+        const webUrl = getQueryParam('web');
+
+        // Set the iframe src attribute
+        if (webUrl) {
+            document.getElementById('loadedWeb').src = webUrl;
+        } else {
+            // Optionally, set a default message or handle the missing URL case
+            document.getElementById('loadedWeb').contentWindow.document.write('No URL provided');
+        }
+    </script>
+</body>
+</html>
