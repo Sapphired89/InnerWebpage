@@ -31,7 +31,7 @@
 </head>
 <body>
     <div>
-        <iframe id="loadedWeb" class="web" onerror="handleError()"></iframe>
+        <iframe id="loadedWeb" class="web"></iframe>
         <div id="errorMessage">Failed to load the specified URL. Please try again.</div>
     </div>
     <script>
@@ -49,8 +49,23 @@
         const webUrl = getQueryParam('web');
 
         if (webUrl) {
-            // Set the iframe src attribute
-            document.getElementById('loadedWeb').src = webUrl;
+            const iframe = document.getElementById('loadedWeb');
+            iframe.src = webUrl;
+
+            // Set a timeout to check if the iframe has loaded correctly
+            iframe.onload = function() {
+                if (iframe.contentWindow.location.href === 'about:blank') {
+                    handleError();
+                }
+            };
+
+            // Add a timeout as a fallback for other errors
+            setTimeout(() => {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc || iframeDoc.documentURI === 'about:blank') {
+                    handleError();
+                }
+            }, 5000);
         } else {
             // Handle missing URL case
             handleError();
